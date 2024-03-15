@@ -11,15 +11,16 @@ void setup() {
 
 void loop() {
   // Lee la temperatura del sensor LM35
-  float temperature = readTemperature();
-
+// Lectura de temperatura
+  int temperature=(-40+0.488155*(analogRead(LM35_PIN)-20)); 
+  // Mostrar la temperatura en el Monitor Serie
   // Imprime la temperatura en el puerto serial
   Serial.print("Temperatura: ");
   Serial.print(temperature);
   Serial.println(" °C");
 
   // Validación 1: Si la temperatura es inferior a 5 °C
-  if (temperature < 5) {
+  if (temperature <= 5) {
     blinkLED(500); // El LED parpadea con un retardo de 0.5 segundos
     digitalWrite(VENTILADOR_PIN, LOW); // El ventilador está apagado
   } 
@@ -38,12 +39,7 @@ void loop() {
 }
 
 // Función para leer la temperatura del sensor LM35
-float readTemperature() {
-  int sensorValue = analogRead(LM35_PIN);
-  float voltage = sensorValue * 5.0 / 1024.0;
-  float temperature = voltage * 100;
-  return temperature;
-}
+
 
 // Función para hacer parpadear el LED
 void blinkLED(int interval) {

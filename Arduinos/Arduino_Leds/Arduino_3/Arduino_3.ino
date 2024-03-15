@@ -2,7 +2,7 @@
 
 const int LM35_PIN = A0;      // Pin analógico donde está conectado el sensor LM35
 const int LED_PIN = 13;       // Pin digital donde está conectado el LED
-const int VENTILADOR_PIN = 10; // Pin digital donde está conectado el ventilador (motor)
+const int VENTILADOR_PIN = 10; // Pin digital donde está conectado el ventilador
 
 LiquidCrystal lcd_1(12, 11, 5, 4, 3, 2);
 
@@ -16,7 +16,7 @@ void setup() {
 
 void loop() {
   // Lee la temperatura del sensor LM35
-  float temperature = readTemperature();
+  int temperature = (-40 + 0.488155 * (analogRead(LM35_PIN) - 20));
 
   // Imprime la temperatura en el puerto serial
   Serial.print("Temperatura: ");
@@ -35,7 +35,7 @@ void loop() {
     digitalWrite(VENTILADOR_PIN, LOW); // El ventilador está apagado
   } 
   // Validación 2: Si la temperatura está entre 11 °C y 25 °C
-  else if (temperature > 10 && temperature <=25) {
+  else if (temperature > 10 && temperature <= 25) {
     digitalWrite(LED_PIN, LOW); // El LED está apagado
     digitalWrite(VENTILADOR_PIN, LOW); // El ventilador está apagado
   } 
@@ -48,16 +48,11 @@ void loop() {
   delay(1000); // Espera un segundo antes de la próxima lectura
 }
 
-float readTemperature() {
-  int sensorValue = analogRead(LM35_PIN);
-  float voltage = sensorValue * 5.0 / 1024.0;
-  float temperature = voltage * 100;
-  return temperature;
-}
-
+// Función para hacer parpadear el LED
 void blinkLED(int interval) {
   digitalWrite(LED_PIN, HIGH);
   delay(interval);
   digitalWrite(LED_PIN, LOW);
   delay(interval);
 }
+
